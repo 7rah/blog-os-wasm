@@ -6,11 +6,10 @@
 
 extern crate alloc;
 
+use alloc::{boxed::Box, vec::Vec};
+use blog_os::{serial_print, serial_println};
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use blog_os::{serial_print, serial_println};
-use alloc::boxed::Box;
-use alloc::vec::Vec;
 
 entry_point!(main);
 
@@ -24,8 +23,6 @@ fn main(boot_info: &'static BootInfo) -> ! {
 fn panic(info: &PanicInfo) -> ! {
     blog_os::test_panic_handler(info)
 }
-
-
 
 #[test_case]
 fn simple_allocation() {
