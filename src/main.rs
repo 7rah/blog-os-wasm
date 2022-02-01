@@ -6,19 +6,13 @@
 
 extern crate alloc;
 use alloc::{boxed::Box, rc::Rc, vec, vec::Vec};
-use blog_os::{
-    allocator, hit_loop, memory, memory::BootInfoFrameAllocator, println, serial_println,
-};
+use blog_os::{hit_loop, println};
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use x86_64::{
-    structures::paging::{Page, Translate},
-    VirtAddr,
-};
 
 entry_point!(kernel_main);
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
-    println!("[Kernel] Hello world{}", "!");
+    println!("[Kernel] Hello world!");
     blog_os::init(boot_info);
 
     let x = Box::new(42);
