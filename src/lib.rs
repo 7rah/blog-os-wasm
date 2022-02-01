@@ -5,26 +5,40 @@
 #![reexport_test_harness_main = "test_main"]
 #![feature(exclusive_range_pattern)]
 #![feature(abi_x86_interrupt)]
+#![feature(alloc_error_handler)]
 
-
+use bootloader::BootInfo;
 use core::panic::PanicInfo;
+use linked_list_allocator::LockedHeap;
+use memory::BootInfoFrameAllocator;
+use x86_64::VirtAddr;
 extern crate alloc;
 
+pub mod allocator;
 pub mod gdt;
 pub mod interrupts;
 pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
-pub mod allocator;
 
 #[global_allocator]
-static ALLOCATOR: allocator::Dummy = allocator::Dummy;
+static ALLOCATOR: LockedHeap = LockedHeap::empty();
+//static ALLOCATOR: allocator::Dummy = allocator::Dummy;
 
-pub fn init() {
+#[alloc_error_handler]
+fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
+    panic!("allocation error: {:?}", layout)
+}
+
+pub fn init(boot_info: &'static BootInfo) {
     gdt::init();
     interrupts::init_idt();
     unsafe { interrupts::PICS.lock().initialize() };
     x86_64::instructions::interrupts::enable();
+    let mut mapper = unsafe { memory::init(VirtAddr::new(boot_info.physical_memory_offset)) };
+    let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 }
 
 pub fn test_runner(tests: &[&dyn Fn()]) {
@@ -42,13 +56,13 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 }
 
 #[cfg(test)]
-use bootloader::{entry_point, BootInfo};
+use bootloader::{entry_point};
 #[cfg(test)]
 entry_point!(test_kernel_main);
 
 #[cfg(test)]
-fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
-    init();
+fn test_kernel_main(boot_info: &'static BootInfo) -> ! {
+    init(boot_info);
     test_main();
     hit_loop()
 }

@@ -7,12 +7,12 @@ use x86_64::{
     PhysAddr, VirtAddr,
 };
 
-pub struct BoootInfoFrameAllocator {
+pub struct BootInfoFrameAllocator {
     memory_map: &'static MemoryMap,
     next: usize,
 }
 
-unsafe impl FrameAllocator<Size4KiB> for BoootInfoFrameAllocator {
+unsafe impl FrameAllocator<Size4KiB> for BootInfoFrameAllocator {
     fn allocate_frame(&mut self) -> Option<PhysFrame<Size4KiB>> {
         let frame = self.usable_frames().nth(self.next);
         self.next += 1;
@@ -20,9 +20,9 @@ unsafe impl FrameAllocator<Size4KiB> for BoootInfoFrameAllocator {
     }
 }
 
-impl BoootInfoFrameAllocator {
+impl BootInfoFrameAllocator {
     pub unsafe fn init(memory_map: &'static MemoryMap) -> Self {
-        BoootInfoFrameAllocator {
+        BootInfoFrameAllocator {
             memory_map,
             next: 0,
         }

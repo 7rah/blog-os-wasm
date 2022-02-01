@@ -180,7 +180,7 @@ pub fn print_something() {
     //writer.write_string("Wörld!");
 
     for i in 0..27 {
-        write!(writer, "[{i:2}] The numbers are {} and {}\n", 42, 1.0 / 3.0).unwrap();
+        writeln!(writer, "[{i:2}] The numbers are {} and {}", 42, 1.0 / 3.0).unwrap();
     }
     writer.clear_row(0);
 }
