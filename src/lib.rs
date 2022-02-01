@@ -6,6 +6,7 @@
 #![feature(exclusive_range_pattern)]
 #![feature(abi_x86_interrupt)]
 #![feature(alloc_error_handler)]
+#![feature(const_mut_refs)]
 
 use bootloader::BootInfo;
 use core::panic::PanicInfo;
@@ -20,10 +21,6 @@ pub mod interrupts;
 pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
-
-#[global_allocator]
-static ALLOCATOR: LockedHeap = LockedHeap::empty();
-//static ALLOCATOR: allocator::Dummy = allocator::Dummy;
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {

@@ -17,26 +17,27 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     let x = Box::new(42);
     println!("u32 value: {x} from heap!!");
+    drop(x);
+    /*
+        let mut vec = Vec::new();
+        for i in 0..500 {
+            vec.push(i);
+        }
+        println!("vec at {:p}", vec.as_slice());
 
-    let mut vec = Vec::new();
-    for i in 0..500 {
-        vec.push(i);
-    }
-    println!("vec at {:p}", vec.as_slice());
-
-    // create a reference counted vector -> will be freed when count reaches 0
-    let reference_counted = Rc::new(vec![1, 2, 3]);
-    let cloned_reference = reference_counted.clone();
-    println!(
-        "current reference count is {}",
-        Rc::strong_count(&cloned_reference)
-    );
-    core::mem::drop(reference_counted);
-    println!(
-        "reference count is {} now",
-        Rc::strong_count(&cloned_reference)
-    );
-
+        // create a reference counted vector -> will be freed when count reaches 0
+        let reference_counted = Rc::new(vec![1, 2, 3]);
+        let cloned_reference = reference_counted.clone();
+        println!(
+            "current reference count is {}",
+            Rc::strong_count(&cloned_reference)
+        );
+        core::mem::drop(reference_counted);
+        println!(
+            "reference count is {} now",
+            Rc::strong_count(&cloned_reference)
+        );
+    */
     /*
         let physical_memory_offset = VirtAddr::new(boot_info.physical_memory_offset);
         let mut mapper = unsafe { memory::init(physical_memory_offset) };
