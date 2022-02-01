@@ -1,9 +1,6 @@
-use crate::{println, serial_println};
-
 use super::Locked;
 use core::{
     alloc::{GlobalAlloc, Layout},
-    mem,
     ptr::NonNull,
 };
 

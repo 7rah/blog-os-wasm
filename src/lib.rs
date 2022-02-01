@@ -10,7 +10,7 @@
 
 use bootloader::BootInfo;
 use core::panic::PanicInfo;
-use linked_list_allocator::LockedHeap;
+
 use memory::BootInfoFrameAllocator;
 use x86_64::VirtAddr;
 extern crate alloc;

@@ -1,9 +1,7 @@
-use crate::println;
-
 use super::{align_up, Locked};
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::{
-    mem::{self, size_of},
+    mem::{self},
     ptr,
 };
 
@@ -56,7 +54,7 @@ impl LinkedListAllocator {
     fn find_region(&mut self, size: usize, align: usize) -> Option<(&'static mut ListNode, usize)> {
         let mut current = &mut self.head;
         while let Some(ref mut region) = current.next {
-            if let Ok(alloc_start) = Self::alloc_from_region(&region, size, align) {
+            if let Ok(alloc_start) = Self::alloc_from_region(region, size, align) {
                 let next = region.next.take();
                 let ret = Some((current.next.take().unwrap(), alloc_start));
 

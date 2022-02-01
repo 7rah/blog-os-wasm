@@ -5,7 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
-use alloc::{boxed::Box, rc::Rc, vec, vec::Vec};
+use alloc::boxed::Box;
 use blog_os::{hit_loop, println};
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;

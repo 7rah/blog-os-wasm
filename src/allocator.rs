@@ -1,5 +1,3 @@
-use alloc::alloc::{GlobalAlloc, Layout};
-use core::ptr::null_mut;
 use x86_64::{
     structures::paging::{
         mapper::MapToError, FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB,
@@ -11,11 +9,8 @@ pub mod bump;
 pub mod dummy;
 pub mod fixed_size_block;
 pub mod linked_list;
-use bump::BumpAllocator;
-use fixed_size_block::FixedSizeBlockAllocator;
-use linked_list::LinkedListAllocator;
 
-use crate::println;
+use fixed_size_block::FixedSizeBlockAllocator;
 
 pub const HEAP_START: usize = 0x_4444_4444_0000;
 pub const HEAP_SIZE: usize = 100 * 1024;
