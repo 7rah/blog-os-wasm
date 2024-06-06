@@ -10,6 +10,8 @@ panic = "abort"
 
 [profile.release]
 panic = "abort"
+lto = "fat"
+codegen-units = 1
 
 [dependencies]
 bootloader = { version = "0.9.21", features = ["map_physical_memory"] }
@@ -21,6 +23,8 @@ uart_16550 = "0.2"
 pic8259 = "0.10"
 pc-keyboard = "0.5"
 linked_list_allocator = "0.9.1"
+wasmi = {version = "0.11.0" ,default-features = false}
+
 
 [package.metadata.bootimage]
 build-command = ["xbuild"]

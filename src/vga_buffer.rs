@@ -12,6 +12,18 @@ lazy_static! {
     });
 }
 
+#[doc(hidden)]
+pub fn write(bytes: &[u8]) {
+    use x86_64::instructions::interrupts;
+    interrupts::without_interrupts(|| {
+        let mut w = WRITER.lock();
+        for &byte in bytes {
+            w.write_byte(byte)
+        }
+    });
+    serial::write(bytes);
+}
+
 #[macro_export]
 macro_rules! print {
     ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
@@ -185,6 +197,7 @@ pub fn print_something() {
     writer.clear_row(0);
 }
 
+use crate::serial;
 #[cfg(test)]
 use crate::{serial_print, serial_println};
 

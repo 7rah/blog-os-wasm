@@ -15,6 +15,7 @@ use memory::BootInfoFrameAllocator;
 use x86_64::VirtAddr;
 extern crate alloc;
 
+pub mod wasm;
 pub mod allocator;
 pub mod gdt;
 pub mod interrupts;

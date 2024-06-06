@@ -38,3 +38,14 @@ macro_rules! serial_println {
     ($fmt:expr, $($arg:tt)*) => ($crate::serial_print!(
         concat!($fmt, "\n"), $($arg)*));
 }
+
+#[doc(hidden)]
+pub fn write(bytes: &[u8]) {
+    use x86_64::instructions::interrupts;
+    interrupts::without_interrupts(|| {
+        let mut w = SERIAL1.lock();
+        for &byte in bytes {
+            w.send(byte);
+        }
+    });
+}
